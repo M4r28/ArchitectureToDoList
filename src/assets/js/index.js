@@ -1,14 +1,14 @@
-import "@scss/styles.scss"
-import { noteStorage } from "./Storage"
+import "@scss/styles.scss";
+import { noteStorage } from "./Storage";
 
-import { domElements } from "./helper"
+import { domElements } from "./helper";
 
-const { addNoteButton, addNoteInput } = domElements
+const { addNoteButton, addNoteInput, noteDiv } = domElements;
 
 addNoteButton.addEventListener("click", () => {
-  const note = addNoteInput.value
+  const note = addNoteInput.value;
   if (note) {
-    noteStorage.emit("addItem", note)
-    addNoteInput.value = ""
+    noteStorage.emit("addItem", note);
+    addNoteInput.value = "";
   }
-})
+});

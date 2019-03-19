@@ -209,6 +209,15 @@ function (_MyNiceEvents) {
       this.save();
     }
   }, {
+    key: "removeDataSet",
+    value: function removeDataSet(dataParameter) {
+      this.data.splice(dataParameter, 1);
+      this.emit("updated", this.data);
+      this.save(); // console.log(`OK REMOVE key -> ${dataParameter}`);
+      // console.log(this.data);
+      // this.data.filter((notes, index) => index != dataParameter);
+    }
+  }, {
     key: "save",
     value: function save() {
       // have access to current data
@@ -244,6 +253,9 @@ noteStorage.on("addItem", function (note) {
 noteStorage.on("updated", function (notes) {
   Object(_helper__WEBPACK_IMPORTED_MODULE_1__["renderNotes"])(notes);
 });
+noteStorage.on("removeItem", function (note) {
+  noteStorage.removeDataSet(note);
+});
 noteStorage.initFinished();
 
 /***/ }),
@@ -260,19 +272,36 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "$", function() { return $; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "domElements", function() { return domElements; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "renderNotes", function() { return renderNotes; });
-// Helper
+/* harmony import */ var _Storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Storage */ "./src/assets/js/Storage.js");
+ // Helper
+
 var $ = function $(selector) {
   return document.querySelector(selector);
 };
 var domElements = {
   addNoteInput: $("#add-note"),
   addNoteButton: $("#add-note-button"),
-  noteContainer: $("#notes")
+  noteContainer: $("#notes"),
+  noteDiv: null
 };
 var renderNotes = function renderNotes(notes) {
-  domElements.noteContainer.innerHTML = notes.map(function (note) {
-    return "\n        <div class=\"note col-lg-4\">\n          ".concat(note, "\n        </div>\n      ");
-  }).join("");
+  domElements.noteContainer.innerHTML = notes.map(function (note, index) {
+    return "\n        <div class=\"note col-lg-4\" id=".concat(index, ">\n          ").concat(note, "\n        </div>\n      ");
+  }).join(""); //only if I have the notes I can target them and add the eventListeners
+
+  domElements.noteDiv = document.querySelectorAll(".note");
+  targetNotes();
+};
+
+var targetNotes = function targetNotes() {
+  //check if we have a note and eventually attach an eventListener
+  var noteDiv = document.querySelectorAll(".note");
+  if (noteDiv !== null) noteDiv.forEach(function (oneDiv) {
+    oneDiv.addEventListener("click", function () {
+      var id = oneDiv.id;
+      _Storage__WEBPACK_IMPORTED_MODULE_0__["noteStorage"].emit("removeItem", id);
+    });
+  });
 };
 
 /***/ }),
@@ -294,7 +323,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var addNoteButton = _helper__WEBPACK_IMPORTED_MODULE_2__["domElements"].addNoteButton,
-    addNoteInput = _helper__WEBPACK_IMPORTED_MODULE_2__["domElements"].addNoteInput;
+    addNoteInput = _helper__WEBPACK_IMPORTED_MODULE_2__["domElements"].addNoteInput,
+    noteDiv = _helper__WEBPACK_IMPORTED_MODULE_2__["domElements"].noteDiv;
 addNoteButton.addEventListener("click", function () {
   var note = addNoteInput.value;
 

@@ -1,7 +1,29 @@
 @import "~bootstrap/scss/bootstrap";
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto Mono", monospace;
+}
+
+body {
+  background-color: rgb(75, 73, 73);
+}
+
 .note {
   margin: 8px;
   padding: 8px;
-  background-color: rgb(255, 233, 111);
+  background-color: rgb(248, 243, 215);
+}
+
+#title {
+  color: rgb(212, 209, 209);
+  font-size: 40px;
+  margin: 40px 0;
+}
+
+#add-note-button{
+  background-color: gray;
+  border: none;
 }
